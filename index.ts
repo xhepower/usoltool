@@ -82,12 +82,19 @@ import Service from "./service.js";
 
   const paSubirPartidos = partirArray(archivosPaSubir, 10);
   const service = new Service();
-  const palJson = [];
+  let palJson = [];
+
   paSubirPartidos.map(async (trozo) => {
     await Promise.all(
       trozo.map(async (item) => {
+        const { foto, pdf, barcode } = item;
         await service.create(item.datos);
-        palJson.push({ foto: item.foto, barcode: item.barcode, pdf: item.pdf });
+        await service.createArchivos({
+          foto,
+          pdf,
+          barcode,
+          nombre: item.datos.nombrePDF,
+        });
         // await service.createArchivos({
         //   foto: item.barcode,
         //   pdf: item.pdf,
@@ -96,8 +103,4 @@ import Service from "./service.js";
       })
     );
   });
-  const jsonArchivos = JSON.stringify(palJson);
-  console.log(jsonArchivos);
-  // Escribir el JSON en un archivo
-  await writeFile("archivos.json", jsonArchivos);
 })();

@@ -1,3 +1,4 @@
+import { nombrePDF } from "data.js";
 import { instance as http } from "./http-common.js";
 interface datos {
   date: Date | null;
@@ -16,6 +17,7 @@ interface Archivos {
   foto: Buffer;
   barcode: Buffer;
   pdf: Buffer;
+  nombre: string;
 }
 //const axios = require("axios").default;
 export default class Service {
@@ -27,8 +29,16 @@ export default class Service {
     }
   }
   async createArchivos(data: Archivos) {
+    const foto = data.foto.toString("base64");
+    const pdf = data.pdf.toString("base64");
+    const barcode = data.barcode.toString("base64");
     try {
-      return http.post("/pdfs/archivos", data);
+      return http.post("/pdfs/archivos", {
+        foto,
+        barcode,
+        pdf,
+        nombre: data.nombre,
+      });
     } catch (error) {
       console.error(error);
     }
