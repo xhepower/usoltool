@@ -82,25 +82,25 @@ import Service from "./service.js";
 
   const paSubirPartidos = partirArray(archivosPaSubir, 10);
   const service = new Service();
-  let palJson = [];
+  let subidos = [];
 
   paSubirPartidos.map(async (trozo) => {
     await Promise.all(
       trozo.map(async (item) => {
         const { foto, pdf, barcode } = item;
-        await service.create(item.datos);
-        await service.createArchivos({
-          foto,
-          pdf,
-          barcode,
-          nombre: item.datos.nombrePDF,
-        });
-        // await service.createArchivos({
-        //   foto: item.barcode,
-        //   pdf: item.pdf,
-        //   barcode: item.barcode,
-        // });
+        const existe = await service.findByName(item.datos.nombrePDF);
+        if (!existe.data) {
+          await service.create(item.datos);
+          await service.createArchivos({
+            foto,
+            pdf,
+            barcode,
+            nombre: item.datos.nombrePDF,
+          });
+          subidos.push(item.datos.nombrePDF);
+        }
       })
     );
   });
+  console.log("arvhivos subidos", subidos.length);
 })();

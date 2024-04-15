@@ -46,6 +46,9 @@ export default class Service {
   async getAll() {
     return http.get("/pdfs");
   }
+  async findByName(nombre: string) {
+    return http.get(`/pdfs/archivos/${nombre}`);
+  }
   async post(data) {
     return http.post("/pdfs/", data);
   }
