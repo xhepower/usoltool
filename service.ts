@@ -33,7 +33,7 @@ export default class Service {
     const pdf = data.pdf.toString("base64");
     const barcode = data.barcode.toString("base64");
     try {
-      return http.post("/pdfs/archivos", {
+      return await http.post("/pdfs/archivos", {
         foto,
         barcode,
         pdf,
