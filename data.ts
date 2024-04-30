@@ -127,9 +127,14 @@ export function nombrePDF(datos: {
   return datos.idNumber + "-" + datos.passport + "-" + fecha;
 }
 export async function extraerImagenes(pdf) {
-  mkdirSync(`./images/${pdf}`, {
-    recursive: true,
-  });
-  await exportImages(`../${pdf}`, `./images/${pdf}/`);
+  try {
+    mkdirSync(`./images/${pdf}`, {
+      recursive: true,
+    });
+    await exportImages(`../${pdf}`, `./images/${pdf}/`);
+  } catch (error) {
+    console.log(error);
+  }
+
   //await exportImages(`../${pdf}`, `./images/`);
 }

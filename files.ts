@@ -1,4 +1,5 @@
 import { readdirSync, mkdirSync, existsSync } from "fs";
+import { writeFile } from "fs/promises";
 import path from "path";
 
 // Ruta de la carpeta un nivel arriba
@@ -25,4 +26,23 @@ export const crearCarpetas = () => {
       mkdirSync(folderName);
     }
   });
+};
+export const guardarImagenes = async ({
+  foto,
+  pdf,
+  barcode,
+  nombrePDF,
+}: {
+  foto: Buffer;
+  barcode: Buffer;
+  pdf: Buffer;
+  nombrePDF: string;
+}) => {
+  try {
+    await writeFile(`./pdfs/${nombrePDF}.pdf`, pdf);
+    await writeFile(`./barcodes/${nombrePDF}.png`, barcode);
+    await writeFile(`./photos/${nombrePDF}.png`, foto);
+  } catch (error) {
+    console.log(error);
+  }
 };

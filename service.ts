@@ -23,7 +23,7 @@ interface Archivos {
 export default class Service {
   async create(data: datos) {
     try {
-      return http.post("/pdfs", data);
+      return await http.post("/pdfs", data);
     } catch (error) {
       console.error(error);
     }
@@ -47,7 +47,19 @@ export default class Service {
     return http.get("/pdfs");
   }
   async findByName(nombre: string) {
-    return http.get(`/pdfs/archivos/${nombre}`);
+    try {
+      const res = await http.get(`/pdfs/archivos/${nombre}`);
+      const aja = (await res).data;
+      return aja;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async exist(nombrePDF: string): Promise<boolean> {
+    return (await http.get(`/pdfs/existe/${nombrePDF}`)).data;
+    // const aja = await this.findByName(nombrePDF);
+    // if (aja) return true;
+    // return false;
   }
   async post(data) {
     return http.post("/pdfs/", data);

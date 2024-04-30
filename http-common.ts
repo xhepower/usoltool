@@ -1,4 +1,5 @@
 import axios from "axios";
+import https from "https";
 import * as dotenv from "dotenv";
 import { urlServer } from "./utils.js";
 dotenv.config();
@@ -19,6 +20,7 @@ console.log(url);
 export const instance = axios.create({
   baseURL: url,
   timeout: 300000,
+  httpsAgent: new https.Agent({ keepAlive: true }),
   headers: {
     Accept: "application/json",
     "Access-Control-Allow-Origin": "*",
