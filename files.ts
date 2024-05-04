@@ -1,5 +1,5 @@
 import { readdirSync, mkdirSync, existsSync } from "fs";
-import { writeFile } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
 import path from "path";
 
 // Ruta de la carpeta un nivel arriba
@@ -39,10 +39,24 @@ export const guardarImagenes = async ({
   nombrePDF: string;
 }) => {
   try {
-    await writeFile(`./pdfs/${nombrePDF}.pdf`, pdf);
-    await writeFile(`./barcodes/${nombrePDF}.png`, barcode);
-    await writeFile(`./photos/${nombrePDF}.png`, foto);
+    let copiado = 0;
+    let repetido = 0;
+    if (existePdfEnCarpetaInterior(nombrePDF) == false) {
+      await writeFile(`./pdfs/${nombrePDF}.pdf`, pdf);
+      await writeFile(`./barcodes/${nombrePDF}.png`, barcode);
+      await writeFile(`./photos/${nombrePDF}.png`, foto);
+      copiado++;
+    } else {
+      repetido++;
+    }
+    return { copiado, repetido };
   } catch (error) {
     console.log(error);
   }
+};
+export const bufferDatos = async (archivoPdf) => {
+  const foto = await readFile(`./images/${archivoPdf}/img_p0_2.png`);
+  const barcode = await readFile(`./images/${archivoPdf}/img_p0_3.png`);
+  const pdf = await readFile(`../${archivoPdf}`);
+  return { foto, barcode, pdf };
 };

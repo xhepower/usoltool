@@ -16,7 +16,6 @@ dotenv.config();
 //   },
 // });
 const url = urlServer();
-console.log(url);
 export const instance = axios.create({
   baseURL: url,
   timeout: 300000,

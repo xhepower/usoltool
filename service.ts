@@ -56,11 +56,22 @@ export default class Service {
     }
   }
   async exist(nombrePDF: string): Promise<boolean> {
-    return (await http.get(`/pdfs/existe/${nombrePDF}`)).data;
-    // const aja = await this.findByName(nombrePDF);
-    // if (aja) return true;
-    // return false;
+    try {
+      const response = await http.get(`/pdfs/existe/${nombrePDF}`);
+      const rta = response.data;
+      return rta;
+    } catch (error) {
+      console.error(nombrePDF, error);
+    }
   }
+  async guardarBd(data: datos) {
+    try {
+      await this.create(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async post(data) {
     return http.post("/pdfs/", data);
   }
