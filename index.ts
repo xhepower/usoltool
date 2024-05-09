@@ -88,7 +88,7 @@ import { create } from "domain";
           const { foto, pdf, barcode } = item;
           await Promise.all([
             await service.guardarBd(item.datos),
-            service.createArchivos({
+            await service.createArchivos({
               foto,
               barcode,
               pdf,
